@@ -46,7 +46,10 @@ int sys_waitx(void)
     
     return  waitx(wtime,rtime);
 }
-
+int sys_ps(void)
+{
+    return ps();
+}
 int
 sys_getpid(void)
 {
@@ -65,6 +68,21 @@ sys_sbrk(void)
   if(growproc(n) < 0)
     return -1;
   return addr;
+}
+int 
+sys_set_priority(void)
+{
+    int priority;
+    int pid;
+    if(argint(0,&pid)<=-1)
+    {
+        cprintf("wrong usage\n");
+    }
+    if(argint(1,&priority)<=-1)
+    {
+        cprintf("wrong usage\n");
+    }
+    return set_priority(pid,priority);
 }
 
 int

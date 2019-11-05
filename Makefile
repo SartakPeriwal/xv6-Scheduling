@@ -198,6 +198,9 @@ UPROGS=\
 	_zombie\
 	_waitx\
 	_test\
+	_ps\
+	_set_priority\
+	_check\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -269,6 +272,9 @@ EXTRA=\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	waitx.c\
 	test.c\
+	ps.c\
+	check.c\
+	set_priority.c\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\

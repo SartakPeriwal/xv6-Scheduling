@@ -424,20 +424,20 @@ scheduler(void)
 #ifdef PBS
         for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
         {
-            struct proc *highP;
-            struct proc *proc_itr;
+            struct proc *highPriority;
+            struct proc *p_iterator;
             if(p->state != RUNNABLE)
                 continue;
 
-            highP = p;
+            highPriority = p;
             // choose one with highest priority
-            for (proc_itr = ptable.proc; proc_itr < &ptable.proc[NPROC]; proc_itr++) {
-                if(proc_itr->state != RUNNABLE)
+            for (p_iterator = ptable.proc; p_iterator < &ptable.proc[NPROC]; p_iterator++) {
+                if(p_iterator->state != RUNNABLE)
                     continue;
-                if (highP->priority > proc_itr->priority)
-                    highP = proc_itr;
+                if (highPriority->priority > p_iterator->priority)
+                    highPriority = p_iterator;
             }
-            p = highP;
+            p = highPriority;
 
             // Switch to chosen process.  It is the process's job
             // to release ptable.lock and then reacquire it
@@ -705,4 +705,51 @@ procdump(void)
         }
         cprintf("\n");
     }
+}
+int ps(void)
+{
+    struct proc *p_iterator;
+    sti();//enable interrrupts
+    acquire(&ptable.lock);
+    cprintf("Proc name \t Process-pid \t \t State \t \t \t Priority \n\n");
+    for(p_iterator = ptable.proc;p_iterator < &ptable.proc[NPROC];p_iterator++)
+    {
+        if(p_iterator->state == RUNNING || p_iterator->state == SLEEPING || p_iterator->state == RUNNABLE )
+        {
+            /*
+                cprintf("%s \t \t %d \t \t %s \t \t %d\n",p_iterator->name,p_iterator->pid,p_iterator->state,p_iterator->priority);
+                */
+            if(p_iterator->state == SLEEPING)
+            {
+                       cprintf("%s \t \t \t%d \t \t SLEEPING \t \t %d \n",p_iterator->name,p_iterator->pid,p_iterator->priority);
+            }  
+            if(p_iterator->state == RUNNING)
+            {
+                       cprintf("%s \t \t \t%d \t \t RUNNING \t \t %d \n",p_iterator->name,p_iterator->pid,p_iterator->priority);
+            }
+            if(p_iterator->state == RUNNABLE)
+            {
+                    cprintf("%s \t \t \t%d \t \t RUNNABLE \t \t %d \n",p_iterator->name,p_iterator->pid,p_iterator->priority);
+            }
+        }
+    }
+    release(&ptable.lock);
+    return 1;
+}
+int set_priority(int pid,int priority)
+{
+    struct proc * p_iterator;
+    acquire(&ptable.lock);
+    for(p_iterator=ptable.proc;p_iterator< &ptable.proc[NPROC];p_iterator++)
+    {
+        if(p_iterator->pid==pid)
+        {
+            cprintf("Previous priority\nwith PID%d Priority%d\n",p_iterator->pid,p_iterator->priority);
+            p_iterator->priority=priority;
+            cprintf("Changed priority\nwith PID%d Priority%d\n",p_iterator->pid,priority);
+        }
+    }
+    release(&ptable.lock);
+    return 1;
+    
 }

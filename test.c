@@ -5,20 +5,20 @@
 
 int main(int argc,char *argv[])
 {
-    for(int i=0;i<10;i++)
+    for(int i=0;i<30;i++)
     {
         int id;
         id=fork();
         if(!id)
         {
-            for(int t=0;t<10;t+=1)
+            for(int t=0;t<30;t+=1)
             {
                 //printf(1,"child created with %d\n", getpid());
             }
             exit();
         }
     }
-    for(int i=0;i<10;i++)
+    for(int i=0;i<30;i++)
     {
         wait();
     }
