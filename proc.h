@@ -1,4 +1,5 @@
 // Per-CPU state
+#define NTICKS 500
 struct cpu {
   uchar apicid;                // Local APIC ID
   struct context *scheduler;   // swtch() here to enter scheduler
@@ -52,7 +53,12 @@ struct proc {
   int stime;
   int etime;
   int rtime;
+  int ticks[5];
+  int queueno;
+  int num_run;
   int priority;
+
+  int Ticks;
 };
 
 // Process memory is laid out contiguously, low addresses first:
@@ -60,3 +66,14 @@ struct proc {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+struct priorityqueue{
+    int ticks;
+    struct proc * queue[NPROC];
+    int priority;
+    int end;
+    int numofproc;
+};
+
+struct priorityqueue q[5];
+
+int TOTAL_ticks;

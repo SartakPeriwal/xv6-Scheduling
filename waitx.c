@@ -12,7 +12,7 @@ int main (int argc,char *argv[])
     pid = fork();
     if (!pid )
     {   
-        exec(argv[1], argv);
+        exec(argv[1], argv+1);
         printf(1, "exec %s failed\n", argv[1]);
         printf(1, "error process id =0\n");
         exit();

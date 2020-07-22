@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "pinfo.h"
 
 int
 sys_fork(void)
@@ -19,7 +20,6 @@ sys_exit(void)
   exit();
   return 0;  // not reached
 }
-
 int
 sys_wait(void)
 {
@@ -117,4 +117,10 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+int sys_getpinfo(void)
+{
+    struct proc_stat *p;
+    argptr(0,(void *)&p,sizeof(*p));
+    return getpinfo(p);
 }

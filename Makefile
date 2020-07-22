@@ -103,6 +103,11 @@ ifeq ($(SCHED),PBS)
 CFLAGS += $(VAR)
 endif
 
+ifeq ($(SCHED),MLFQ)
+	VAR = -D MLFQ
+CFLAGS += $(VAR)
+endif
+
 CFLAGS += $(VAR)
 
 xv6.img: bootblock kernel
@@ -201,6 +206,7 @@ UPROGS=\
 	_ps\
 	_set_priority\
 	_check\
+	_pinfo\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -275,6 +281,7 @@ EXTRA=\
 	ps.c\
 	check.c\
 	set_priority.c\
+	pinfo.c\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
